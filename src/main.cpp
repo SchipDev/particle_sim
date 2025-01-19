@@ -1,19 +1,28 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
-#include "particle/Particle.h" // Include the header file for the Particle class
+#include "particle/Particle.h"
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Particle Simulator");
+    const int windowWidth = 1000;
+    const int windowHeight = 800;
+    const int cellSize = 20;  // Size of each grid cell
+    const int rows = windowHeight / cellSize;
+    const int cols = windowWidth / cellSize;
+
+    // Set up Grid Manager
+    GridManager gridManager = GridManager(rows, cols, cellSize);
+
+    sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Particle Grid Simulation");
+    sf::Clock clock;
+
     std::vector<Particle> particles;
 
-    // Add some particles
-    particles.emplace_back(100.f, 100.f, 50.f, 50.f, 10.f);
-    particles.emplace_back(200.f, 150.f, -30.f, 40.f, 5.f);
-    particles.emplace_back(200.f, 10.f, 30.f, -40.f, 30.f);
-    particles.emplace_back(200.f, 300.f, -30.f, 40.f, 3.f);
-    particles.emplace_back(200.f, 25.f, 30.f,-40.f, 15.f);
-
-    sf::Clock clock;
+    // Initialize particles at random grid positions
+    for (int i = 0; i < 15; ++i) {
+        int gridX = rand() % cols;
+        int gridY = rand() % rows;
+        particles.emplace_back(gridX, gridY, cellSize, gridManager);
+    }
 
     while (window.isOpen()) {
         sf::Event event;
@@ -24,17 +33,23 @@ int main() {
 
         float dt = clock.restart().asSeconds();
 
+        // Update particles
         for (auto& particle : particles) {
-            particle.update(dt); // Update each particle
+            particle.updatePosition();
         }
 
+        // Render particles
         window.clear();
         for (const auto& particle : particles) {
-            particle.draw(window); // Draw each particle
+            particle.draw(window);
         }
         window.display();
+
+        // Controlling particle speed through simulation time because of movement style
+        sf::sleep(sf::milliseconds(30));
     }
 
     return 0;
 }
+
 

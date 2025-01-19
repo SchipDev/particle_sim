@@ -2,16 +2,22 @@
 #define PARTICLE_H
 
 #include <SFML/Graphics.hpp>
+#include "grid/GridManager.h"
 
 class Particle {
 private:
-    sf::RectangleShape shape;  // The graphical representation of the particle
-    sf::Vector2f velocity;  // Velocity of the particle
+    sf::Vector2i gridPosition;  // Grid position (row, column)
+    sf::RectangleShape shape;   // Visual representation
+    float size;                 // Size of the particle
+    GridManager& gridManager;   // Refernence to the simulations grid manager
 
 public:
-    Particle(float x, float y, float vx, float vy, float size); // Constructor
-    void update(float dt);                          // Update position
-    void draw(sf::RenderWindow& window) const;      // Draw the particle
+    Particle(int gridX, int gridY, float cellSize, GridManager& manager);
+    void updatePosition();
+    void draw(sf::RenderWindow& window) const;
+
+    sf::Vector2i getGridPosition() const;
+    void setGridPosition(int x, int y);
 };
 
 #endif // PARTICLE_H
