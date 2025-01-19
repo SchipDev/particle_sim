@@ -9,21 +9,19 @@ Particle::Particle(int gridX, int gridY, float cellSize, GridManager& manager)
 
 
 void Particle::updatePosition() {
-    // This is a simple physics sim so well start trying to fall straight down
-    if (gridManager.tryUpdateParticlePosition(*this, getGridPosition().x, getGridPosition().y+1)) {
-        setGridPosition(getGridPosition().x, getGridPosition().y+1);
+    // Try to fall straight down
+    if (gridManager.tryUpdateParticlePosition(*this, getGridPosition().x, getGridPosition().y + 1)) {
+        setGridPosition(getGridPosition().x, getGridPosition().y + 1);  
     }
-    // Next try to fall to the right
-    else if (gridManager.tryUpdateParticlePosition(*this, getGridPosition().x+1, getGridPosition().y+1)) {
-        setGridPosition(getGridPosition().x+1, getGridPosition().y+1);
+    // Try to fall to the right
+    else if (gridManager.tryUpdateParticlePosition(*this, getGridPosition().x + 1, getGridPosition().y + 1)) {
+        setGridPosition(getGridPosition().x + 1, getGridPosition().y + 1);  
     }
-    // Last try to fall to the left
-    else if (gridManager.tryUpdateParticlePosition(*this, getGridPosition().x-1, getGridPosition().y+1)) {
-        setGridPosition(getGridPosition().x-1, getGridPosition().y+1);
+    // Try to fall to the left
+    else if (gridManager.tryUpdateParticlePosition(*this, getGridPosition().x - 1, getGridPosition().y + 1)) {
+        setGridPosition(getGridPosition().x - 1, getGridPosition().y + 1);  
     }
-
-    // If none of those work, we stay in the same plaec
-    
+    // If no movement is possible, stay in place (optional)
 }
 
 void Particle::draw(sf::RenderWindow& window) const {

@@ -28,7 +28,8 @@ bool GridManager::tryUpdateParticlePosition(Particle& particle, int newX, int ne
 }
 
 void GridManager::addParticle(Particle& particle, int x, int y) {
-    grid[particle.getGridPosition().y][particle.getGridPosition().x] = true;
+    // Add particle to the new position in the grid
+    grid[y][x] = true;  // Set the cell as occupied
 }
 
 void GridManager::removeParticle(Particle& particle) {

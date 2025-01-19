@@ -46,7 +46,7 @@ int main() {
         window.display();
 
         // Controlling particle speed through simulation time because of movement style
-        sf::sleep(sf::milliseconds(30));
+        sf::sleep(sf::milliseconds(50));
     }
 
     return 0;
