@@ -19,6 +19,7 @@ public:
     GridManager(int rows, int cols, float cellSize);
     bool checkCell(int x, int y);
     bool tryUpdateParticlePosition(Particle& particle, int newX, int newY);
+    bool isCellEmpty(int x, int y);
 
 
 };

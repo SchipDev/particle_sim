@@ -35,3 +35,7 @@ void GridManager::addParticle(Particle& particle, int x, int y) {
 void GridManager::removeParticle(Particle& particle) {
     grid[particle.getGridPosition().y][particle.getGridPosition().x] = false;
 }
+
+bool GridManager::isCellEmpty(int x, int y) {
+    return !grid[y][x]; // Return the opposite boolean value
+}
