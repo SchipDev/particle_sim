@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 
 class Particle;
+class StaticParticle;
 
 class GridManager {
 
@@ -18,8 +19,10 @@ private:
 public:
     GridManager(int rows, int cols, float cellSize);
     bool checkCell(int x, int y);
+    void addStaticParticle(StaticParticle& particle, int x, int y);
     bool tryUpdateParticlePosition(Particle& particle, int newX, int newY);
     bool isCellEmpty(int x, int y);
+    void printGrid() const;
 
 
 };

@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD 17)
 add_executable(ParticleSimulator 
     src/main.cpp 
     src/particle/Particle.cpp
+    src/particle/StaticParticle.cpp
     src/grid/GridManager.cpp
 )
 

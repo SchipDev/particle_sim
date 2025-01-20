@@ -1,25 +1,28 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include "particle/Particle.h"
+#include "particle/StaticParticle.h"
 
 int main() {
     const int windowWidth = 1000;
     const int windowHeight = 800;
-    const int cellSize = 1;  // Size of each grid cell
+    const int cellSize = 10;  // Size of each grid cell
     const int rows = windowHeight / cellSize;
     const int cols = windowWidth / cellSize;
-    const int simulation_delay = 10;
+    const int simulation_delay = 30;
 
-    bool isMousePressed = false; 
+    bool isMouseLeftPressed = false; 
+    bool isMouseRightPressed = false; 
     sf::Vector2i mousePressedPos;
 
     // Set up Grid Manager
-    GridManager gridManager = GridManager(rows, cols, cellSize);
+    GridManager gridManager(rows, cols, cellSize);
 
     sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Particle Grid Simulation");
     sf::Clock clock;
 
     std::vector<Particle> particles;
+    std::vector<StaticParticle> staticParticles;
 
     // Initialize particles at random grid positions
     for (int i = 0; i < 15; ++i) {
@@ -36,21 +39,27 @@ int main() {
 
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (event.mouseButton.button == sf::Mouse::Left) {
-                    isMousePressed = true;
+                    isMouseLeftPressed = true;
                     mousePressedPos = sf::Mouse::getPosition(window);  // Store the position of the click
+                }
+                else if (event.mouseButton.button == sf::Mouse::Right) {
+                    isMouseRightPressed = true;
                 }
             }
 
             if (event.type == sf::Event::MouseButtonReleased) {
                 if (event.mouseButton.button == sf::Mouse::Left) {
-                    isMousePressed = false;  // Mouse button is released
+                    isMouseLeftPressed = false;  // Mouse button is released
+                }
+                else if (event.mouseButton.button == sf::Mouse::Right) {
+                    isMouseRightPressed = false;
                 }
             }
         }
 
 
         // Spawn particles at mouse position if it is held down. 
-        if (isMousePressed) {
+        if (isMouseLeftPressed) {
             sf::Vector2i currentMousePos = sf::Mouse::getPosition(window);
 
             // Calculate mouse grid position
@@ -63,10 +72,22 @@ int main() {
                     particles.emplace_back(mouseGridX, mouseGridY, cellSize, gridManager);
                 }
             }
-            // particles.emplace_back(mouseGridX, mouseGridY, cellSize, gridManager);
         }
+        if (isMouseRightPressed) {
+            sf::Vector2i currentRightMousePos = sf::Mouse::getPosition(window);
 
-
+            // Calculate mouse grid position
+            int mouseGridX = currentRightMousePos.x / cellSize;
+            int mouseGridY = currentRightMousePos.y / cellSize;
+            // Ensure the mouse is in a valid cell
+            if (mouseGridX >= 0 && mouseGridX < cols && mouseGridY >= 0 && mouseGridY < rows) {
+                // Only spawn a particle if the cell is empty
+                if (gridManager.isCellEmpty(mouseGridX, mouseGridY)) {
+                    staticParticles.emplace_back(mouseGridX, mouseGridY, cellSize, gridManager);
+                }
+            }
+        }
+        
 
         // Update particles
         for (auto& particle : particles) {
@@ -78,6 +99,10 @@ int main() {
         for (const auto& particle : particles) {
             particle.draw(window);
         }
+        for (const auto& staticParticle : staticParticles) {
+            staticParticle.draw(window);
+        }
+
         window.display();
 
         // Controlling particle speed through simulation time because of movement style

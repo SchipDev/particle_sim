@@ -1,5 +1,7 @@
 #include "GridManager.h"
 #include "particle/Particle.h"
+#include "particle/StaticParticle.h"
+#include <iostream>
 
 
 
@@ -32,10 +34,24 @@ void GridManager::addParticle(Particle& particle, int x, int y) {
     grid[y][x] = true;  // Set the cell as occupied
 }
 
+void GridManager::addStaticParticle(StaticParticle& particle, int x, int y) {
+    // Add particle to the new position in the grid
+    grid[y][x] = true;  // Set the cell as occupied
+}
+
 void GridManager::removeParticle(Particle& particle) {
     grid[particle.getGridPosition().y][particle.getGridPosition().x] = false;
 }
 
 bool GridManager::isCellEmpty(int x, int y) {
     return !grid[y][x]; // Return the opposite boolean value
+}
+
+void GridManager::printGrid() const {
+    for (const auto& row : grid) {
+        for (bool cell : row) {
+            std::cout << (cell ? "1" : "0") << " ";
+        }
+        std::cout << std::endl;
+    }
 }
